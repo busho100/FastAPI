@@ -1,0 +1,21 @@
+BEGIN TRANSACTION;
+CREATE TABLE blogs (
+	id INTEGER NOT NULL, 
+	title VARCHAR, 
+	body VARCHAR, 
+	PRIMARY KEY (id)
+);
+INSERT INTO "blogs" VALUES(1,'１番目の投稿','テスト投稿１');
+INSERT INTO "blogs" VALUES(2,'２番目の投稿','テスト投稿２');
+INSERT INTO "blogs" VALUES(3,'３番目の投稿：更新','テスト投稿３：更新');
+CREATE TABLE users (
+	id INTEGER NOT NULL, 
+	name VARCHAR, 
+	email VARCHAR, 
+	password VARCHAR, 
+	PRIMARY KEY (id)
+);
+INSERT INTO "users" VALUES(1,'test','test@test.com','password');
+CREATE INDEX ix_users_id ON users (id);
+CREATE INDEX ix_blogs_id ON blogs (id);
+COMMIT;
