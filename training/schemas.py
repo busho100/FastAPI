@@ -18,5 +18,13 @@ class ShowBlog(BaseModel):
 class User(BaseModel):
     name:str
     email:EmailStr
-    password: str
+    password:str
     id: int
+
+class ShowUser(BaseModel):
+    name: str
+    email: EmailStr
+
+    class Config:
+        from_attributes = True
+    
