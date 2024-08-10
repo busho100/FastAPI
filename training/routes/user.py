@@ -5,9 +5,12 @@ from .. import models
 from sqlalchemy.orm import Session
 from ..hashing import Hash
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/user',
+    tags=['users']
+)
 
-@router.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
+@router.post('/', status_code=status.HTTP_201_CREATED, tags=['users'])
 def create_user(request: User, db:Session = Depends(get_db)):
     #パスワードのハッシュ化
     new_user = models.User(name=request.name, email=request.email, password=Hash.bcrypt(request.password))
@@ -16,7 +19,7 @@ def create_user(request: User, db:Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
-@router.get('/user/{id}', response_model=ShowUser, tags=['users'])
+@router.get('/{id}', response_model=ShowUser, tags=['users'])
 def get_user(id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not User:
