@@ -4,6 +4,7 @@ from ..schemas import Blog, ShowBlog, ShowUser, User
 from ..database import get_db
 from .. import models
 from sqlalchemy.orm import Session
+from ..functions import blog
 
 router = APIRouter(
     prefix='/blog',
@@ -21,16 +22,9 @@ def create(blog:Blog, db: Session= Depends(get_db)):
     return new_blog
 
 @router.delete('/{id}',status_code = status.HTTP_204_NO_CONTENT, tags=['blogs'])
-def delete(id: int, db: Session = Depends(get_db)):
-    blog = db.query(models.Blog).filter(models.Blog.id == id)
-
-    if not blog.first():
-        raise 
-        HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not found')
-    blog.delete(synchronize_session=False)
-    db.commit()
-
-    return 'Deletion completed'
+def delete(id, db: Session = Depends(get_db)):
+    
+    return blog.destroy(id, db)
 
 @router.put('{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
 def update(id, request: Blog, db: Session=Depends(get_db)):
