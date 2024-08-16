@@ -26,16 +26,10 @@ def delete(id, db: Session = Depends(get_db)):
     
     return blog.destroy(id, db)
 
-@router.put('{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
+@router.put('{id}', status_code=status.HTTP_202_ACCEPTED)
 def update(id, request: Blog, db: Session=Depends(get_db)):
-    blog_query = db.query(models.Blog).filter(models.Blog.id==id)
-    if not blog_query.first():
-        raise 
-        HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Blog with the id {id} is not found')
-    blog_query.update(request.dict(),synchronize_session=False)
-    db.commit()
 
-    return{'Update completed'}
+    return blog.update(id, request, db)
 
 @router.get('/', response_model = List[ShowBlog], tags=['blogs'])
 def all_fetch(db: Session = Depends(get_db)):
